@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content %}
+    <div class="container-fluid main">
+        <div class="left-sidebar">
+            <div class="imp-links">
+                <a href=""><img width="40px" height="40px" style="border-radius: 50%; margin-right: 20px;" src="{{profile.image.url}}" >{{profile.user}}</a>
+                <a href=""><i class="fa fa-users"></i> Groups</a>  
+                <a href=""><i class="fas fa-user-friends"></i>Friends</a> 
+                <a href=""><i class="fas fa-watch"></i>Watch</a> 
+                <a href=""><i class="fas fa-memory"></i>Memory</a>
+                <a href=""><i class="fas fa-save"></i>Save</a>
+                <a href=""><i class="fa fa-flag"></i>Pages</a>
+                <a href=""><i class="fa fa-id-card"></i>evevts</a>
+                <a href=""><i class="fas fa-bus-school"></i>Jobs</a>
+            </div>
+            <div class="shortcut">
+                <p>Your Shortcuts</p>
+                </div>
+        </div>
+        <div class="maincontainer">
+            <div style="display: none;" class="pcf bg-secondary">
+                <form action="{% url 'post_create' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <button type="button">create</button>
+                </form>
+            </div>
+            <div class="story-gallary">
+                {% for s in story %}
+                <div class="story-img">
+                    <img src="{{s.image.url}}" alt="">
+                    <div class="story">
+                        <img src="{{s.author.image.url}}" >
+                        <p>{{s.author.user}}</p>
+                    </div>  
+                </div>
+                {% endfor %}  
+            </div> 
+
+            <div class="post-create p-3 ">
+                <div class="c d-flex">
+                    <img style="border-radius: 50%;" height="40px" width="40px" src="{{profile.image.url}}" alt="">
+                    
+                    <input class="pcfi"  type="text" name="create-post-text" placeholder="Whats on your mind, {{profile.user}}?"> 
+                </div>
+                
+                <hr class="my-0">
+                <div class="vif d-flex justify-content-between px-5">
+                    <a href=""><i style="color: red; margin-right: 10px;" class="fas fa-video"></i> Live video</a>
+                    <a href=""><i style="color: rgb(57, 207, 43); margin-right: 10px;" class="fas fa-image    "></i> Images/Video</a>
+                    <a href=""> Feelings/Activity</a>
+                </div>
+            </div>
+            
+            {% for post in posts %}
+            <div class="post my-2">
+                <div class="inner-post">
+                    <div class="post-headding">
+                        <div class="img">
+                            <img style="border-radius: 50%;" width="40px" height="40px" src="{{post.author.image.url}}" >
+                        </div>
+                        <div class="name-time ms-3">
+                            <h6>{{post.author.user}}</h6>
+                            <p>{{post.post_created|timesince}} . public</p>
+                        </div>
+                        <div class="threedot">
+                            <p>...</p>
+                        </div>
+                    </div>
+                    <p class="mt-2">{{post.title}}</p>
+                    {% if post.image %}
+                    <img class="post-img" src="{{post.image.url}}">
+                    {% endif %}
+                    <div class="like-comment-count mt-3">
+                        <p>you and <span class="lc{{post.id}}">{{post.like.all.count}}</span> others</p> 
+                        <a href="">{{post.cc}}comments</a>
+                    </div>
+                    <hr class="my-1">
+                    <div class="like-comment-btn ">
+                        <a  post-id="{{post.id}}" class="like-btn btn" ><i class="f_icon fas fa-thumbs-up"></i>like</a>
+                        <a  class="comm btn" p-id="{{post.id}}"><p > <i class="f_icon fa fa-comment" ></i> comments</p></a>
+                        <p><i class="f_icon fa fa-share" aria-hidden="true"></i>share</p>
+                    </div>
+                    <hr class="my-1">
+                    <div style="display: none;"  class="comment-section{{post.id}}">
+                        <p>view more 3comments</p>
+                        
+                        {% for comment in comments %}
+                        {% if post == comment.post %}
+                        <div class="comment ">
+                            
+                            <img style="border-radius: 50%;" width="40" height="40" src="{{comment.author.image.url}}">
+                            <div  class="name-comment ms-3 ">
+                                <div style="background: #595e5e; border-radius: 25px;" class="">
+                                    <p>{{comment.author.user}}</p>
+                                    <p>{{comment.title}}</p>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                        <div class=" mt-0 ms-5 mb-3 ">
+                            <a style="font-size: small;color:#595e5e" href="">Like</a>
+                            <a style="font-size: small;color:#595e5e" href="">Reply</a>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        <p>view more 1 comment</p>
+                        <div class="comment-input">
+                            <img style="border-radius: 50%;" width="40" height="40" src="{{profile.image.url}}">
+                            <form  action="{% url 'add-comment' post.id %}" method="POST">
+                                {% csrf_token %}
+                                
+                                    <input type="text"   name="comment_text" placeholder="write your comment..." required>
+                                    <button class="btn btn-sm btn-info">ok</button>
+                            
+                                
+                                </form>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+        <div class="right-sidebar">
+            <div style="border-radius: 5px;" class="birthday  p-3">
+                <div class="innerb d-flex justify-content-between">
+                    <p>Birthday</p>
+                    <p>X</p>
+                </div>
+                Rakib and 7 others hava birthday today
+            </div>
+            <hr>
+            Sponsered
+            <hr>
+            <div class="onlines">
+                <div class="heading d-flex justify-content-between">
+                    <p>Contacts</p>
+                    <div class="oi">
+                        <a class="mx-3" href=""><i class="fas fa-video    "></i></a>
+                        <a class="mx-3" href=""><i class="fa fa-search" ></i></a>
+                        <a class="mx-3">...</a>
+                    </div>
+                </div>
+                {% for p in profiles %}
+                <div class="online_users my-2 d-flex">
+                    <img style="border-radius: 50%;" width="35px" height="35px" src="{{p.image.url}}" alt="">
+                    <p class="ms-4">{{ p.user }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="settings ">
+                <a href="{% url 'profile' profile.id%}" style="text-decoration: none;" class="p-4 user_info d-flex align-items-center">
+                    <img width="50px" height="50px" style="border-radius: 50%;" src="{{profile.image.url}}" alt="">
+                    <div style="line-height: 0;" class="username ms-4">
+                        <p >{{ profile.user}}</p>
+                        <small style="color: silver;">see your profile</small>
+                    </div>
+                    
+                </a>
+                <hr class="my-0">
+                <div class="feedback d-flex align-items-center p-4">
+                    <i class="si fas fa-comment-alt"></i>
+                    <div style="line-height: 0;" class="feedback_text ms-4">
+                        <p>Give Feedback</p>
+                        <small>Thanks</small>
+                    </div>
+                </div>
+                
+                <hr class="my-0">
+                <div class="settings-link">
+                    <i class="si fas fa-cog "></i>
+                    <a href=""><p>Settings & Privacy</p> <i class=" fas fa-chevron-right"></i></a>
+                </div>
+                <div class="settings-link">
+                    <i class="si far fa-question-circle"></i>
+                    <a href=""><p>Help & Support</p> <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="settings-link">
+                    <i class="fas si fa-moon"></i>
+                    <a href=""><p>Display</p><i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="settings-link">
+                    <i class="si fas fa-sign-out-alt"></i>
+                    <a href="{% url 'logout' %}"><p>Logout</p><i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script>
+        $('.comm').on('click',function(){
+            let id = $(this).attr('p-id')
+            $(`.comment-section${id}`).toggle('slow')
+        })  
+        
+        $('#arrow_d').click(function(){
+        console.log('gfcfy')
+        document.querySelector('.settings').classList.toggle('settings-menu-js')
+        
+    })
+
+    $('.pcfi').click(function(){
+        $('.pcf').toggle()
+    })
+
+    </script>
+
+    {% endblock %}
+
+
+
+

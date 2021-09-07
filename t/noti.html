@@ -1,0 +1,11 @@
+{% load notifications_tags %}
+
+{% notifications_unread as n_u %}
+{% if n_u %}
+<h3>you have {% live_notify_badge %} unread notifications</h3>
+{% live_notify_list %}
+{{ live_notify_list|safe }}
+{% endif %}
+{% for i in user.notifications.unread %}
+{{i|safe}} <br>
+{% endfor %}

@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid main">
+    <div class="left-sidebar">
+        <div class="imp-links">
+            <a href=""><img width="80px" height="50px" src="{% static 'fb.png' %}" >Msi</a>
+            <a href=""><img width="80px" height="50px" src="{% static 'fb.png' %}" >Msi</a>
+            <a href=""><img width="80px" height="50px" src="{% static 'fb.png' %}" >Msi</a>
+            <a href=""><img width="80px" height="50px" src="{% static 'fb.png' %}" >Msi</a>
+            <a href=""><img width="80px" height="50px" src="{% static 'fb.png' %}" >Msi</a>
+        </div>
+        <div class="shortcut">
+            <p>Shortcuts</p>
+            <a href=""><img width="80px" height="50px" src="{% static 'fb.png' %}" >Msi</a>
+            <a href=""><img width="80px" height="50px" src="{% static 'fb.png' %}" >Msi</a>
+        </div>
+    </div>
+    <div class="maincontainer">
+        <!-- <div class="story-gallary">
+            <div class="story">
+                <img src="{% static 'fb.png' %}" >
+                <p>Story</p>
+            </div>
+            <div class="story">
+                <img src="{% static 'fb.png' %}" >
+                <p>Story</p>
+            </div>
+            <div class="story">
+                <img src="{% static 'fb.png' %}" >
+                <p>Story</p>
+            </div>
+            <div class="story">
+                <img src="{% static 'fb.png' %}" >
+                <p>Story</p>
+            </div>
+        </div> -->
+        <div class="post-create ">
+            <div class="c d-flex">
+                <img style="border-radius: 50%;" height="40px" width="40px" src="{{profile.image.url}}" alt="">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input class="form-control" id="btn-t" width="100%" type="text" name="create-post-text" placeholder="Whats on your mind, {{profile.user}}?">
+    
+
+                </form>
+            </div>
+            
+            <hr>
+            <div class="vif d-flex justify-content-between px-5">
+                <a href="">Live video</a>
+                <a href="">Images/Video</a>
+                <a href="">Feelings/Activity</a>
+            </div>
+        </div>
+        
+        {% for post in posts %}
+        <div class="post my-2">
+            <div class="inner-post">
+                <div class="post-headding">
+                    <div class="img">
+                        <img style="border-radius: 50%;" width="40px" height="40px" src="{{post.author.image.url}}" >
+                    </div>
+                    <div class="name-time ms-3">
+                        <h6>{{post.author.user}}</h6>
+                        <p>{{post.post_created|timesince}} . public</p>
+                    </div>
+                    <div class="threedot">
+                        <p>...</p>
+                    </div>
+                </div>
+                <p class="mt-2">{{post.title}}</p>
+                {% if post.image %}
+                <img class="post-img" src="{{post.image.url}}">
+                {% endif %}
+                <div class="like-comment-count mt-3">
+                    <p>you and <span class="lc{{post.id}}">{{post.like.all.count}}</span> others</p> 
+                    <a href="">10comments</a>
+                </div>
+                <hr class="my-1">
+                <div class="like-comment-btn ">
+                    <a  post-id="{{post.id}}" class="like-btn btn" ><i class="f_icon fas fa-thumbs-up"></i>like</a>
+                    <p> <i class="f_icon fa fa-comment" ></i> comments</p>
+                    <p><i class="f_icon fa fa-share" aria-hidden="true"></i>share</p>
+                </div>
+                <hr class="my-1">
+                <div class="comment-section">
+                    <p>view more 3comments</p>
+                    
+                    {% for comment in comments %}
+                    {% if post == comment.post %}
+                    <div class="comment ">
+                        
+                        <img style="border-radius: 50%;" width="40" height="40" src="{{comment.author.image.url}}">
+                        <div  class="name-comment ms-3 ">
+                            <div style="background: #595e5e; border-radius: 25px;" class="">
+                                <p>{{comment.author.user}}</p>
+                                <p>{{comment.title}}</p>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    <div class=" mt-0 ms-5 mb-3 ">
+                        <a style="font-size: small;color:#595e5e" href="">Like</a>
+                        <a style="font-size: small;color:#595e5e" href="">Reply</a>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    <p>view more 1 comment</p>
+                    <div class="comment-input">
+                        <img style="border-radius: 50%;" width="40" height="40" src="{{profile.image.url}}">
+                        <form  action="{% url 'add-comment' post.id %}" method="POST">
+                            {% csrf_token %}
+                            
+                                <input type="text"   name="comment_text" placeholder="write your comment..." required>
+                                <button class="btn btn-sm btn-info">ok</button>
+                        
+                            
+                            </form>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        {% endfor %}
+    </div>
+    <div class="rightcontainer"></div>
+</div>
+
+
+
+<div style="display: none;" id="navbarTogglerDemo02">
+    <form class="form-inline my-2 my-lg-0" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button>Submit</button>
+    </form>
+  </div>
+
+
+
+  <script>
+    $('#btn-t').click(function(){
+        $('#navbarTogglerDemo02').show('slow');
+        console.log('csdskj')
+    })
+
+
+console.log('sgdhsgbdl')
+</script>
+
+
+
+            {% endblock %}
